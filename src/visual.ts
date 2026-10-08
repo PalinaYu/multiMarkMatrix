@@ -113,6 +113,26 @@ export class Visual implements IVisual {
 
     private formattingSettingsService: FormattingSettingsService;
 
+    private tooltipHideTimer:
+        ReturnType<typeof setTimeout> | null =
+        null;
+
+    private tooltipMoveFrame:
+        number | null =
+        null;
+
+    private activeTooltipElement:
+        HTMLElement | null =
+        null;
+
+    private pendingTooltipMove:
+        {
+            x: number;
+            y: number;
+            selectionId: ISelectionId;
+        } | null =
+        null;
+
     private formattingSettings:
         VisualFormattingSettingsModel =
         new VisualFormattingSettingsModel();
@@ -217,6 +237,7 @@ export class Visual implements IVisual {
     constructor(options: VisualConstructorOptions) {
 
         this.host = options.host;
+
         this.events = options.host.eventService;
 
         this.selectionManager =
@@ -275,6 +296,8 @@ export class Visual implements IVisual {
 
 
     public update(options: VisualUpdateOptions): void {
+
+        this.hideActiveTooltip();
 
         this.events.renderingStarted(options);
 
@@ -6578,14 +6601,57 @@ export class Visual implements IVisual {
 
 
         /*
-         * Standard tooltip + Report Page Tooltip context.
+         * Stable tooltip handling.
+         *
+         * Use pointerenter/pointerleave instead of pointerover/pointerout
+         * so moving between the mark and its own DOM context does not create
+         * extra hide/show cycles. The hide is delayed briefly and cancelled
+         * when the pointer enters another mark, which prevents the host's
+         * normal delayed hide from hiding the next tooltip.
+         *
+         * pointermove is throttled to one host move per animation frame and
+         * does not resend tooltip data. The data is sent only by show().
          */
         element.addEventListener(
-            "pointerover",
+            "pointerenter",
             (
                 event:
                     PointerEvent
             ) => {
+
+                if (
+                    this.tooltipHideTimer !==
+                        null
+                ) {
+
+                    clearTimeout(
+                        this.tooltipHideTimer
+                    );
+
+                    this.tooltipHideTimer =
+                        null;
+                }
+
+
+                if (
+                    this.tooltipMoveFrame !==
+                        null
+                ) {
+
+                    cancelAnimationFrame(
+                        this.tooltipMoveFrame
+                    );
+
+                    this.tooltipMoveFrame =
+                        null;
+                }
+
+
+                this.pendingTooltipMove =
+                    null;
+
+                this.activeTooltipElement =
+                    element;
 
 
                 if (
@@ -6629,60 +6695,171 @@ export class Visual implements IVisual {
                     PointerEvent
             ) => {
 
-
                 if (
-                    !this.host
-                        .tooltipService
-                        .enabled()
+                    this.activeTooltipElement !==
+                        element ||
+                    event.pointerType !==
+                        "mouse"
                 ) {
 
                     return;
                 }
 
 
-                this.host
-                    .tooltipService
-                    .move({
+                this.pendingTooltipMove = {
 
-                        coordinates: [
-                            event.clientX,
-                            event.clientY
-                        ],
+                    x:
+                        event.clientX,
 
-                        isTouchEvent:
-                            event.pointerType ===
-                            "touch",
+                    y:
+                        event.clientY,
 
-                        dataItems:
-                            mark.tooltipItems,
+                    selectionId:
+                        mark.selectionId
+                };
 
-                        identities: [
-                            mark.selectionId
-                        ]
-                    });
+
+                if (
+                    this.tooltipMoveFrame !==
+                        null
+                ) {
+
+                    return;
+                }
+
+
+                this.tooltipMoveFrame =
+                    requestAnimationFrame(
+                        () => {
+
+                            this.tooltipMoveFrame =
+                                null;
+
+
+                            const pending =
+                                this.pendingTooltipMove;
+
+
+                            this.pendingTooltipMove =
+                                null;
+
+
+                            if (
+                                pending ===
+                                    null ||
+                                this.activeTooltipElement !==
+                                    element ||
+                                !this.host
+                                    .tooltipService
+                                    .enabled()
+                            ) {
+
+                                return;
+                            }
+
+
+                            this.host
+                                .tooltipService
+                                .move({
+
+                                    coordinates: [
+                                        pending.x,
+                                        pending.y
+                                    ],
+
+                                    isTouchEvent:
+                                        false,
+
+                                    identities: [
+                                        pending.selectionId
+                                    ]
+                                });
+                        }
+                    );
             }
         );
 
 
         element.addEventListener(
-            "pointerout",
+            "pointerleave",
             (
                 event:
                     PointerEvent
             ) => {
 
+                if (
+                    this.activeTooltipElement !==
+                        element
+                ) {
 
-                this.host
-                    .tooltipService
-                    .hide({
+                    return;
+                }
 
-                        isTouchEvent:
-                            event.pointerType ===
-                            "touch",
 
-                        immediately:
-                            false
-                    });
+                if (
+                    this.tooltipMoveFrame !==
+                        null
+                ) {
+
+                    cancelAnimationFrame(
+                        this.tooltipMoveFrame
+                    );
+
+                    this.tooltipMoveFrame =
+                        null;
+                }
+
+
+                this.pendingTooltipMove =
+                    null;
+
+
+                if (
+                    this.tooltipHideTimer !==
+                        null
+                ) {
+
+                    clearTimeout(
+                        this.tooltipHideTimer
+                    );
+                }
+
+
+                this.tooltipHideTimer =
+                    setTimeout(
+                        () => {
+
+                            this.tooltipHideTimer =
+                                null;
+
+
+                            if (
+                                this.activeTooltipElement !==
+                                    element
+                            ) {
+
+                                return;
+                            }
+
+
+                            this.activeTooltipElement =
+                                null;
+
+
+                            this.host
+                                .tooltipService
+                                .hide({
+
+                                    isTouchEvent:
+                                        event.pointerType ===
+                                        "touch",
+
+                                    immediately:
+                                        false
+                                });
+                        },
+                        80
+                    );
             }
         );
 
@@ -6901,6 +7078,63 @@ export class Visual implements IVisual {
 
 
         return element;
+    }
+
+
+    private hideActiveTooltip(): void {
+
+        if (
+            this.tooltipHideTimer !==
+                null
+        ) {
+
+            clearTimeout(
+                this.tooltipHideTimer
+            );
+
+            this.tooltipHideTimer =
+                null;
+        }
+
+
+        if (
+            this.tooltipMoveFrame !==
+                null
+        ) {
+
+            cancelAnimationFrame(
+                this.tooltipMoveFrame
+            );
+
+            this.tooltipMoveFrame =
+                null;
+        }
+
+
+        this.pendingTooltipMove =
+            null;
+
+        this.activeTooltipElement =
+            null;
+
+
+        if (
+            this.host
+                .tooltipService
+                .enabled()
+        ) {
+
+            this.host
+                .tooltipService
+                .hide({
+
+                    isTouchEvent:
+                        false,
+
+                    immediately:
+                        true
+                });
+        }
     }
 
 
