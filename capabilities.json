@@ -1,0 +1,652 @@
+{
+  "privileges": [],
+  "dataRoles": [
+    {
+      "name": "rows",
+      "displayName": "Rows",
+      "kind": "Grouping",
+      "displayNameKey": "DataRole_Rows"
+    },
+    {
+      "name": "columns",
+      "displayName": "Columns",
+      "kind": "Grouping",
+      "displayNameKey": "DataRole_Columns"
+    },
+    {
+      "name": "status",
+      "displayName": "Category",
+      "kind": "Grouping",
+      "displayNameKey": "DataRole_Category"
+    },
+    {
+      "name": "markOrder",
+      "displayName": "Mark Order",
+      "kind": "Grouping",
+      "displayNameKey": "DataRole_MarkOrder"
+    },
+    {
+      "name": "tooltips",
+      "displayName": "Tooltips",
+      "kind": "GroupingOrMeasure",
+      "displayNameKey": "DataRole_Tooltips"
+    }
+  ],
+  "dataViewMappings": [
+    {
+      "conditions": [
+        {
+          "status": {
+            "max": 1
+          },
+          "markOrder": {
+            "max": 1
+          }
+        }
+      ],
+      "table": {
+        "rows": {
+          "select": [
+            {
+              "for": {
+                "in": "rows"
+              }
+            },
+            {
+              "for": {
+                "in": "columns"
+              }
+            },
+            {
+              "for": {
+                "in": "status"
+              }
+            },
+            {
+              "for": {
+                "in": "markOrder"
+              }
+            },
+            {
+              "for": {
+                "in": "tooltips"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "objects": {
+    "general": {
+      "properties": {
+        "formatString": {
+          "type": {
+            "formatting": {
+              "formatString": true
+            }
+          }
+        }
+      }
+    },
+    "statusColors": {
+      "properties": {
+        "analyseDurchgefuehrt": {
+          "type": {
+            "fill": {
+              "solid": {
+                "color": true
+              }
+            }
+          }
+        },
+        "analyseFreigegeben": {
+          "type": {
+            "fill": {
+              "solid": {
+                "color": true
+              }
+            }
+          }
+        },
+        "analyseGereviewed": {
+          "type": {
+            "fill": {
+              "solid": {
+                "color": true
+              }
+            }
+          }
+        },
+        "analyseRcBatchClosed": {
+          "type": {
+            "fill": {
+              "solid": {
+                "color": true
+              }
+            }
+          }
+        },
+        "durchzufuehrendeAnalyse": {
+          "type": {
+            "fill": {
+              "solid": {
+                "color": true
+              }
+            }
+          }
+        },
+        "investigationOpen": {
+          "type": {
+            "fill": {
+              "solid": {
+                "color": true
+              }
+            }
+          }
+        },
+        "sampleRejectedCanceled": {
+          "type": {
+            "fill": {
+              "solid": {
+                "color": true
+              }
+            }
+          }
+        },
+        "analyseInBearbeitung": {
+          "type": {
+            "fill": {
+              "solid": {
+                "color": true
+              }
+            }
+          }
+        },
+        "analyseRejectedCanceled": {
+          "type": {
+            "fill": {
+              "solid": {
+                "color": true
+              }
+            }
+          }
+        },
+        "notMapped": {
+          "type": {
+            "fill": {
+              "solid": {
+                "color": true
+              }
+            }
+          }
+        }
+      }
+    },
+    "statusShapes": {
+      "properties": {
+        "analyseDurchgefuehrtShape": {
+          "type": {
+            "enumeration": [
+              {
+                "displayName": "Square",
+                "value": "square"
+              },
+              {
+                "displayName": "Circle",
+                "value": "circle"
+              },
+              {
+                "displayName": "Diamond",
+                "value": "diamond"
+              },
+              {
+                "displayName": "Triangle",
+                "value": "triangle"
+              }
+            ]
+          }
+        },
+        "analyseFreigegebenShape": {
+          "type": {
+            "enumeration": [
+              {
+                "displayName": "Square",
+                "value": "square"
+              },
+              {
+                "displayName": "Circle",
+                "value": "circle"
+              },
+              {
+                "displayName": "Diamond",
+                "value": "diamond"
+              },
+              {
+                "displayName": "Triangle",
+                "value": "triangle"
+              }
+            ]
+          }
+        },
+        "analyseGereviewedShape": {
+          "type": {
+            "enumeration": [
+              {
+                "displayName": "Square",
+                "value": "square"
+              },
+              {
+                "displayName": "Circle",
+                "value": "circle"
+              },
+              {
+                "displayName": "Diamond",
+                "value": "diamond"
+              },
+              {
+                "displayName": "Triangle",
+                "value": "triangle"
+              }
+            ]
+          }
+        },
+        "analyseRcBatchClosedShape": {
+          "type": {
+            "enumeration": [
+              {
+                "displayName": "Square",
+                "value": "square"
+              },
+              {
+                "displayName": "Circle",
+                "value": "circle"
+              },
+              {
+                "displayName": "Diamond",
+                "value": "diamond"
+              },
+              {
+                "displayName": "Triangle",
+                "value": "triangle"
+              }
+            ]
+          }
+        },
+        "durchzufuehrendeAnalyseShape": {
+          "type": {
+            "enumeration": [
+              {
+                "displayName": "Square",
+                "value": "square"
+              },
+              {
+                "displayName": "Circle",
+                "value": "circle"
+              },
+              {
+                "displayName": "Diamond",
+                "value": "diamond"
+              },
+              {
+                "displayName": "Triangle",
+                "value": "triangle"
+              }
+            ]
+          }
+        },
+        "investigationOpenShape": {
+          "type": {
+            "enumeration": [
+              {
+                "displayName": "Square",
+                "value": "square"
+              },
+              {
+                "displayName": "Circle",
+                "value": "circle"
+              },
+              {
+                "displayName": "Diamond",
+                "value": "diamond"
+              },
+              {
+                "displayName": "Triangle",
+                "value": "triangle"
+              }
+            ]
+          }
+        },
+        "sampleRejectedCanceledShape": {
+          "type": {
+            "enumeration": [
+              {
+                "displayName": "Square",
+                "value": "square"
+              },
+              {
+                "displayName": "Circle",
+                "value": "circle"
+              },
+              {
+                "displayName": "Diamond",
+                "value": "diamond"
+              },
+              {
+                "displayName": "Triangle",
+                "value": "triangle"
+              }
+            ]
+          }
+        },
+        "analyseInBearbeitungShape": {
+          "type": {
+            "enumeration": [
+              {
+                "displayName": "Square",
+                "value": "square"
+              },
+              {
+                "displayName": "Circle",
+                "value": "circle"
+              },
+              {
+                "displayName": "Diamond",
+                "value": "diamond"
+              },
+              {
+                "displayName": "Triangle",
+                "value": "triangle"
+              }
+            ]
+          }
+        },
+        "analyseRejectedCanceledShape": {
+          "type": {
+            "enumeration": [
+              {
+                "displayName": "Square",
+                "value": "square"
+              },
+              {
+                "displayName": "Circle",
+                "value": "circle"
+              },
+              {
+                "displayName": "Diamond",
+                "value": "diamond"
+              },
+              {
+                "displayName": "Triangle",
+                "value": "triangle"
+              }
+            ]
+          }
+        },
+        "notMappedShape": {
+          "type": {
+            "enumeration": [
+              {
+                "displayName": "Square",
+                "value": "square"
+              },
+              {
+                "displayName": "Circle",
+                "value": "circle"
+              },
+              {
+                "displayName": "Diamond",
+                "value": "diamond"
+              },
+              {
+                "displayName": "Triangle",
+                "value": "triangle"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "matrixAppearance": {
+      "properties": {
+        "markSize": {
+          "type": {
+            "numeric": true
+          }
+        },
+        "markGap": {
+          "type": {
+            "numeric": true
+          }
+        },
+        "rowHeight": {
+          "type": {
+            "numeric": true
+          }
+        },
+        "valueFontSize": {
+          "type": {
+            "numeric": true
+          }
+        },
+        "headerFontSize": {
+          "type": {
+            "numeric": true
+          }
+        },
+        "markShape": {
+          "type": {
+            "enumeration": [
+              {
+                "displayName": "Square",
+                "value": "square"
+              },
+              {
+                "displayName": "Circle",
+                "value": "circle"
+              },
+              {
+                "displayName": "Diamond",
+                "value": "diamond"
+              },
+              {
+                "displayName": "Triangle",
+                "value": "triangle"
+              }
+            ]
+          }
+        },
+        "showGrid": {
+          "type": {
+            "bool": true
+          }
+        },
+        "gridColor": {
+          "type": {
+            "fill": {
+              "solid": {
+                "color": true
+              }
+            }
+          }
+        },
+        "headerBackground": {
+          "type": {
+            "fill": {
+              "solid": {
+                "color": true
+              }
+            }
+          }
+        },
+        "headerTextColor": {
+          "type": {
+            "fill": {
+              "solid": {
+                "color": true
+              }
+            }
+          }
+        },
+        "rowHeaderBold": {
+          "type": {
+            "bool": true
+          }
+        },
+        "autoWidth": {
+          "type": {
+            "bool": true
+          }
+        },
+        "wordWrap": {
+          "type": {
+            "bool": true
+          }
+        },
+        "valueFontFamily": {
+          "type": {
+            "formatting": {
+              "fontFamily": true
+            }
+          }
+        },
+        "headerFontFamily": {
+          "type": {
+            "formatting": {
+              "fontFamily": true
+            }
+          }
+        },
+        "valueHeaderFontFamily": {
+          "type": {
+            "formatting": {
+              "fontFamily": true
+            }
+          }
+        },
+        "valueHeaderFontSize": {
+          "type": {
+            "numeric": true
+          }
+        }
+      }
+    },
+    "legend": {
+      "properties": {
+        "showLegend": {
+          "type": {
+            "bool": true
+          }
+        },
+        "position": {
+          "type": {
+            "enumeration": [
+              {
+                "displayName": "Top",
+                "value": "top"
+              },
+              {
+                "displayName": "Bottom",
+                "value": "bottom"
+              },
+              {
+                "displayName": "Left",
+                "value": "left"
+              },
+              {
+                "displayName": "Right",
+                "value": "right"
+              }
+            ]
+          }
+        },
+        "fontSize": {
+          "type": {
+            "numeric": true
+          }
+        },
+        "showTitle": {
+          "type": {
+            "bool": true
+          }
+        },
+        "fontFamily": {
+          "type": {
+            "formatting": {
+              "fontFamily": true
+            }
+          }
+        },
+        "titleText": {
+          "type": {
+            "text": true
+          }
+        },
+        "titleFontFamily": {
+          "type": {
+            "formatting": {
+              "fontFamily": true
+            }
+          }
+        },
+        "titleFontSize": {
+          "type": {
+            "numeric": true
+          }
+        }
+      }
+    },
+    "internalState": {
+      "properties": {
+        "layoutState": {
+          "type": {
+            "text": true
+          }
+        },
+        "columnSortState": {
+          "type": {
+            "text": true
+          }
+        },
+        "manualColumnOrder": {
+          "type": {
+            "text": true
+          }
+        },
+        "rowSortState": {
+          "type": {
+            "text": true
+          }
+        }
+      }
+    },
+    "sortingControls": {
+      "properties": {
+        "showColumnSortButtons": {
+          "type": {
+            "bool": true
+          }
+        },
+        "showRowSortButtons": {
+          "type": {
+            "bool": true
+          }
+        }
+      }
+    }
+  },
+  "tooltips": {
+    "supportedTypes": {
+      "default": true,
+      "canvas": true
+    },
+    "roles": [
+      "tooltips"
+    ],
+    "supportEnhancedTooltips": true
+  },
+  "supportsKeyboardFocus": true,
+  "supportsMultiVisualSelection": true,
+  "supportsLandingPage": true,
+  "supportsEmptyDataView": true
+}
